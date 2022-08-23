@@ -112,20 +112,26 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 	else callback = callbackCache[index] end
 	if type == "button" then
 		local newButton = Instance.new("TextButton")
+		local nameTextLabel = Instance.new("TextLabel")
+		nameTextLabel.Parent = newButton
+		nameTextLabel.Font = Enum.Font.GothamMedium
+		nameTextLabel.TextColor3 = Color3.new(1,1,1)
+		nameTextLabel.BackgroundTransparency = 1
+		nameTextLabel.Size = UDim2.new(.635,0,1,0)
+		nameTextLabel.AnchorPoint = Vector2.new(0.5,0)
+		nameTextLabel.Position = UDim2.new(0.5, 0, 0, 0)
+		nameTextLabel.Text = callbacksChild.name or "Button"
+		nameTextLabel.TextScaled = true
+		Instance.new("UITextSizeConstraint", nameTextLabel).MaxTextSize = 20
+
 		newButton.BorderSizePixel = 0
 		newButton.BackgroundTransparency = 0.5
 		newButton.BackgroundColor3 = Color3.new(0,0,0)
-		newButton.Font = Enum.Font.Gotham
-		newButton.Text = callbacksChild.name or "Button"
-		newButton.TextScaled = true
-		newButton.TextColor3 = Color3.new(1,1,1)
+		newButton.Text = ""
 		newButton.Parent = scrollOptionsFrame
 		newButton.AutoButtonColor = false
-		newButton.TextXAlignment = Enum.TextXAlignment.Left
-		newButton.TextYAlignment = Enum.TextYAlignment.Center
 		newButton.Size = UDim2.new(0,365,0,30)
 		newButton.Activated:Connect(callback)
-		Instance.new("UICorner", newButton)
 	end
 end
 
