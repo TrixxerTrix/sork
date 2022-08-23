@@ -132,6 +132,43 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		newButton.AutoButtonColor = false
 		newButton.Size = UDim2.new(0,365,0,30)
 		newButton.Activated:Connect(callback)
+	elseif type == "string" then
+		local newStringFrame = Instance.new("Frame")
+		newStringFrame.BackgroundTransparency = 0.5
+		newStringFrame.BackgroundColor3 = Color3.new(0,0,0)
+		newStringFrame.BorderSizePixel = 0
+		newStringFrame.Size = UDim2.new(0, 365, 0, 30)
+		newStringFrame.Parent = scrollOptionsFrame
+		
+		local nameTextLabel = Instance.new("TextLabel")
+		nameTextLabel.Parent = newStringFrame
+		nameTextLabel.Font = Enum.Font.GothamMedium
+		nameTextLabel.TextColor3 = Color3.new(1,1,1)
+		nameTextLabel.BackgroundTransparency = 1
+		nameTextLabel.Size = UDim2.new(.635,0,1,0)
+		nameTextLabel.AnchorPoint = Vector2.new(0.5,0)
+		nameTextLabel.Position = UDim2.new(0.5, 0, 0, 0)
+		nameTextLabel.Text = callbacksChild.name or "TextBox"
+		nameTextLabel.TextScaled = true
+		Instance.new("UITextSizeConstraint", nameTextLabel).MaxTextSize = 20
+		
+		local newTextBox = Instance.new("TextBox")
+		newTextBox.BackgroundTransparency = 0.5
+		newTextBox.BorderSizePixel = 0
+		newTextBox.Font = Enum.Font.GothamMedium
+		newTextBox.TextScaled = true
+		newTextBox.PlaceholderText = "string"
+		newTextBox.TextColor3 = Color3.new(1,1,1)
+		newTextBox.Size = UDim2.new(0, 100, 0, 21)
+		newTextBox.Position = UDim2.new(0.515, 0, 0.14, 0)
+		newTextBox.Text = ""
+		newTextBox.ClearTextOnFocus = false
+		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
+		if callbacksChild.name then
+			newTextBox:GetPropertyChangedSignal("Text"):Connect(function()
+				getgenv().sork.global[callbacksChild.name] = newTextBox.Text
+			end)
+		end
 	end
 end
 
@@ -143,13 +180,14 @@ topbar.BackgroundTransparency, topbar.BackgroundColor3, topbar.BorderSizePixel =
 local topbarTextLabel = Instance.new("TextLabel")
 topbarTextLabel.Parent = topbar
 topbarTextLabel.BackgroundTransparency = 1
-topbarTextLabel.Font = Enum.Font.Gotham
+topbarTextLabel.Font = Enum.Font.GothamMedium
 topbarTextLabel.TextScaled = true
 topbarTextLabel.Size = UDim2.new(0.979, 0, 1, 0)
 topbarTextLabel.TextXAlignment = Enum.TextXAlignment.Left
 topbarTextLabel.TextColor3 = Color3.new(1,1,1)
 topbarTextLabel.Position = UDim2.new(0.021, 0, 0, 0)
 topbarTextLabel.Text = currentGameDictionary.title
+Instance.new("UITextSizeConstraint", topbarTextLabel).MaxTextSize = 20
 
 task.wait(.25)
 coroutine.wrap(function()
