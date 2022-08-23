@@ -1,10 +1,10 @@
 local games = {}
 games.__index = games
 
-games[9285510960] = {
-	title = "sork (floppa hangout)",
+games[7363647365] = {
+	title = "sork (sbf...)",
 	stuff = {
-		{callback = "floppa.lua", type = "button", name = "kick yourself"}
+		{callback = "idk_i_was_messing_around.lua", type = "button", name = "do something funny"}
 	}
 }
 
