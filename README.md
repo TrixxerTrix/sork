@@ -10,4 +10,5 @@ once you launch the game it gets the place-id and it checks for it in the gamesD
 function with a return at the start, then just makes it a table then it does stuff!!!
 
 the order is:
-numbers > buttons > toggles > strings (i can change it if i want but i think it's alright for now)
+~~numbers > buttons > toggles > strings (i can change it if i want but i think it's alright for now)~~
+**ACTUALLY.. there is no order!** since the next loop just loops through the order it'll just go in order however the callbacks are organized
