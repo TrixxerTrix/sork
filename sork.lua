@@ -107,11 +107,11 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 	local type = callbacksChild.type
 	local callback
 	if callbacksChild.callback then
-		if not callbackCache[index] then
-			callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
-			callbackCache[index] = callback
-		else callback = callbackCache[index] end
-	else callback = (function() end) end
+	    if not callbackCache[index] then
+		    callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
+		    callbackCache[index] = callback
+	    else callback = callbackCache[index] end
+	else callback = function() end end
 	if type == "button" then
 		local newButton = Instance.new("TextButton")
 		local nameTextLabel = Instance.new("TextLabel")
@@ -147,23 +147,24 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		nameTextLabel.Font = Enum.Font.GothamMedium
 		nameTextLabel.TextColor3 = Color3.new(1,1,1)
 		nameTextLabel.BackgroundTransparency = 1
-		nameTextLabel.Size = UDim2.new(.635,0,1,0)
-		nameTextLabel.AnchorPoint = Vector2.new(0.5,0)
-		nameTextLabel.Position = UDim2.new(0.5, 0, 0, 0)
+		nameTextLabel.Size = UDim2.new(.386,0,1,0)
+		nameTextLabel.Position = UDim2.new(0.063, 0, 0, 0)
 		nameTextLabel.Text = callbacksChild.name or "TextBox"
 		nameTextLabel.TextScaled = true
 		Instance.new("UITextSizeConstraint", nameTextLabel).MaxTextSize = 20
 		
 		local newTextBox = Instance.new("TextBox")
 		newTextBox.BackgroundTransparency = 0.5
+		newTextBox.BackgroundColor3 = Color3.new(0,0,0)
 		newTextBox.BorderSizePixel = 0
 		newTextBox.Font = Enum.Font.GothamMedium
 		newTextBox.TextScaled = true
 		newTextBox.PlaceholderText = "string"
 		newTextBox.TextColor3 = Color3.new(1,1,1)
-		newTextBox.Size = UDim2.new(0, 100, 0, 21)
+		newTextBox.Size = UDim2.new(0, 150, 0, 21)
 		newTextBox.Position = UDim2.new(0.515, 0, 0.14, 0)
 		newTextBox.Text = ""
+		newTextBox.Parent = newStringFrame
 		newTextBox.ClearTextOnFocus = false
 		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
 		if callbacksChild.name then
