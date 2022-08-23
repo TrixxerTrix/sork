@@ -1,5 +1,5 @@
 # sork
-script-hub, basically lunarian ss v2
+script-hub, basically lunarian sh v2
 i allow modification of the script but making more "overpowered" versions i shall not allow
 
 uses a new json system for redirections of scripts
