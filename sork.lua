@@ -106,10 +106,12 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 	-- what type is it??????????
 	local type = callbacksChild.type
 	local callback
-	if not callbackCache[index] then
-		callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
-		callbackCache[index] = callback
-	else callback = callbackCache[index] end
+	if callbacksChild.callback then
+		if not callbackCache[index] then
+			callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
+			callbackCache[index] = callback
+		else callback = callbackCache[index] end
+	else callback = (function() end) end
 	if type == "button" then
 		local newButton = Instance.new("TextButton")
 		local nameTextLabel = Instance.new("TextLabel")
