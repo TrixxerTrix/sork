@@ -12,12 +12,14 @@ local repositoryPrefix = "https://raw.githubusercontent.com/TrixxerTrix/sork/mai
 local userIS = game:GetService("UserInputService")
 local tweenSE = game:GetService("TweenService")
 local debrisSE = game:GetService("Debris")
+local players = game:GetService("Players")
 local callbackCache = {}
 local gamesDictionary = (function()
 	local rawDictionary = game:HttpGet(repositoryPrefix .. "gamesDictionary.lua")
 	local actualDictionary = loadstring(rawDictionary)()
 	return actualDictionary
 end)()
+
 local currentGameDictionary = gamesDictionary[game.PlaceId]
 if not (currentGameDictionary) then
 	error("game dictionary doesnt exist")
@@ -102,15 +104,23 @@ TEMPUiListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 TEMPUiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TEMPUiListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 
+local function chooseRandomPlayer()
+	local previousPlayer = nil
+	while true do
+		previousPlayer = players:GetPlayers()[Random.new():NextInteger(1, #players:GetPlayers())]
+		if previousPlayer ~= players.LocalPlayer then return previousPlayer end
+	end
+end
+
 for index, callbacksChild in next, currentGameDictionary.stuff do
 	-- what type is it??????????
 	local type = callbacksChild.type
 	local callback
 	if callbacksChild.callback then
-	    if not callbackCache[index] then
-		    callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
-		    callbackCache[index] = callback
-	    else callback = callbackCache[index] end
+		if not callbackCache[index] then
+			callback = loadstring(game:HttpGet(repositoryPrefix .. "callbacks/" .. callbacksChild.callback))
+			callbackCache[index] = callback
+		else callback = callbackCache[index] end
 	else callback = function() end end
 	if type == "button" then
 		local newButton = Instance.new("TextButton")
@@ -141,7 +151,7 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		newStringFrame.BorderSizePixel = 0
 		newStringFrame.Size = UDim2.new(0, 365, 0, 30)
 		newStringFrame.Parent = scrollOptionsFrame
-		
+
 		local nameTextLabel = Instance.new("TextLabel")
 		nameTextLabel.Parent = newStringFrame
 		nameTextLabel.Font = Enum.Font.GothamMedium
@@ -152,7 +162,7 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		nameTextLabel.Text = callbacksChild.name or "TextBox"
 		nameTextLabel.TextScaled = true
 		Instance.new("UITextSizeConstraint", nameTextLabel).MaxTextSize = 20
-		
+
 		local newTextBox = Instance.new("TextBox")
 		newTextBox.BackgroundTransparency = 0.5
 		newTextBox.BackgroundColor3 = Color3.new(0,0,0)
@@ -169,7 +179,7 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
 		if callbacksChild.name then
 			newTextBox:GetPropertyChangedSignal("Text"):Connect(function()
-				getgenv().sork.global[callbacksChild.name] = newTextBox.Text
+				getgenv().sork.global[callbacksChild.name] = newTextBox.Text:gsub("@local", players.LocalPlayer.DisplayName):gsub("@random", chooseRandomPlayer().DisplayName)
 			end)
 		end
 	end
