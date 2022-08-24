@@ -2,6 +2,7 @@ local event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.S
 local sorkGlobal = getgenv().sork.global
 
 return function(state)
+  print(state)
   sorkGlobal.Spam_Misc = sorkGlobal.Spam_Misc or {}
   if not (sorkGlobal.Spam_Misc.Binded) and (state) then
     sorkGlobal.Spam_Misc.Binded = true
