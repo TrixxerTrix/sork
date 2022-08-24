@@ -1,13 +1,9 @@
 local event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
 
-return function(state)
-  print(state)
-  getgenv().sork.global.Spam_Misc = getgenv().sork.global.Spam_Misc or {}
-  if not (getgenv().sork.global.Spam_Misc.Binded) and (state) then
-    getgenv().sork.global.Spam_Misc.Binded = true
-    while (getgenv().sork.global.Spam) do
-      event:FireServer(getgenv().sork.global["Message to say"], "All")
-      task.wait(2)
-    end
+if not game:GetService("Players").LocalPlayer:FindFirstChild("Sork"):GetAttribute("spamMessage_ran") then
+  game:GetService("Players").LocalPlayer:FindFirstChild("Sork"):SetAttribute("spamMessage_ran", true)
+  while game:GetService("Players").LocalPlayer:FindFirstChild("Sork"):IsDescendantOf(game:GetService("Players").LocalPlayer) and (getfenv().sork.global["Spam"]) do
+    event:FireServer(getfenv().sork.global["Message to say"], "All")
+    task.wait(1)
   end
 end
