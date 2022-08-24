@@ -12,3 +12,6 @@ function with a return at the start, then just makes it a table then it does stu
 the order is:
 ~~numbers > buttons > toggles > strings (i can change it if i want but i think it's alright for now)~~
 **ACTUALLY.. there is no order!** since the next loop just loops through the order it'll just go in order however the callbacks are organized
+
+## idk what to put here
+just enjoy
