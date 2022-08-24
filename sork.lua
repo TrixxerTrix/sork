@@ -144,7 +144,7 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		newButton.AutoButtonColor = false
 		newButton.Size = UDim2.new(0,365,0,30)
 		newButton.Activated:Connect(callback)
-	elseif type == "string" then
+	elseif (type == "string") or (type == "number") then
 		local newStringFrame = Instance.new("Frame")
 		newStringFrame.BackgroundTransparency = 0.5
 		newStringFrame.BackgroundColor3 = Color3.new(0,0,0)
@@ -169,19 +169,93 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 		newTextBox.BorderSizePixel = 0
 		newTextBox.Font = Enum.Font.GothamMedium
 		newTextBox.TextScaled = true
-		newTextBox.PlaceholderText = "string"
+		newTextBox.PlaceholderText = (type == "number") and "number" or "string"
 		newTextBox.TextColor3 = Color3.new(1,1,1)
 		newTextBox.Size = UDim2.new(0, 150, 0, 21)
 		newTextBox.Position = UDim2.new(0.515, 0, 0.14, 0)
-		newTextBox.Text = ""
+		newTextBox.Text = (type == "number") and 0 or ""
+		if (type == "number") then
+			getgenv().sork.global[callbacksChild.name] = tonumber(newTextBox.Text)
+		end
 		newTextBox.Parent = newStringFrame
 		newTextBox.ClearTextOnFocus = false
 		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
+		local currentPlayer = nil
 		if callbacksChild.name then
 			newTextBox:GetPropertyChangedSignal("Text"):Connect(function()
-				getgenv().sork.global[callbacksChild.name] = newTextBox.Text:gsub("@local", players.LocalPlayer.DisplayName):gsub("@random", chooseRandomPlayer().DisplayName)
+				currentPlayer = chooseRandomPlayer()
+				if (type == "number") then
+					newTextBox.Text = tonumber(newTextBox.Text)
+					getgenv().sork.global[callbacksChild.name] = tonumber(newTextBox.Text)
+				else
+					getgenv().sork.global[callbacksChild.name] = newTextBox.Text:gsub("@local", players.LocalPlayer.DisplayName):gsub("@random", currentPlayer.DisplayName)
+				end
 			end)
 		end
+	elseif type == "boolean" then
+		local current = false
+		local newBooleanFrame = Instance.new("Frame")
+		newBooleanFrame.BackgroundTransparency = 0.5
+		newBooleanFrame.BackgroundColor3 = Color3.new(0,0,0)
+		newBooleanFrame.BorderSizePixel = 0
+		newBooleanFrame.Size = UDim2.new(0, 365, 0, 30)
+		newBooleanFrame.Parent = scrollOptionsFrame
+
+		local nameTextLabel = Instance.new("TextLabel")
+		nameTextLabel.Parent = newBooleanFrame
+		nameTextLabel.Font = Enum.Font.GothamMedium
+		nameTextLabel.TextColor3 = Color3.new(1,1,1)
+		nameTextLabel.BackgroundTransparency = 1
+		nameTextLabel.Size = UDim2.new(.386,0,1,0)
+		nameTextLabel.Position = UDim2.new(0.063, 0, 0, 0)
+		nameTextLabel.Text = callbacksChild.name or "Boolean"
+		nameTextLabel.TextScaled = true
+		Instance.new("UITextSizeConstraint", nameTextLabel).MaxTextSize = 20
+		
+		--[[
+		local newTextBox = Instance.new("TextBox")
+		newTextBox.BackgroundTransparency = 0.5
+		newTextBox.BackgroundColor3 = Color3.new(0,0,0)
+		newTextBox.BorderSizePixel = 0
+		newTextBox.Font = Enum.Font.GothamMedium
+		newTextBox.TextScaled = true
+		newTextBox.PlaceholderText = (type == "number") and "number" or "string"
+		newTextBox.TextColor3 = Color3.new(1,1,1)
+		newTextBox.Size = UDim2.new(0, 150, 0, 21)
+		newTextBox.Position = UDim2.new(0.515, 0, 0.14, 0)
+		newTextBox.Text = (type == "number") and 0 or ""
+		if (type == "number") then
+			getgenv().sork.global[callbacksChild.name] = tonumber(newTextBox.Text)
+		end
+		newTextBox.Parent = newStringFrame
+		newTextBox.ClearTextOnFocus = false
+		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
+		]]
+		
+		local newTextBox = Instance.new("TextButton")
+		newTextBox.BackgroundTransparency = 0.5
+		newTextBox.BackgroundColor3 = Color3.new(0, 0, 0)
+		newTextBox.BorderSizePixel = 0
+		newTextBox.Font = Enum.Font.GothamMedium
+		newTextBox.TextScaled = true
+		newTextBox.Text = "OFF"
+		newTextBox.TextColor3 = Color3.new(1,1,1)
+		newTextBox.Size = UDim2.new(0, 150, 0, 21)
+		newTextBox.Position = UDim2.new(0.515, 0, 0.14, 0)
+		newTextBox.Parent = newBooleanFrame
+		Instance.new("UITextSizeConstraint", newTextBox).MaxTextSize = 20
+		
+		newTextBox.Activated:Connect(function()
+			current = not (current)
+			if (current) then
+				newTextBox.Text = "ON"
+				getgenv().sork.global[callbacksChild.Name] = true
+			else
+				newTextBox.Text = "OFF"
+				getgenv().sork.global[callbacksChild.Name] = false
+			end
+			callback(current)
+		end)
 	end
 end
 
