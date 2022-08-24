@@ -13,6 +13,8 @@ local userIS = game:GetService("UserInputService")
 local tweenSE = game:GetService("TweenService")
 local debrisSE = game:GetService("Debris")
 local players = game:GetService("Players")
+local sorkFolder = Instance.new("BoolValue", players.LocalPlayer)
+sorkFolder.Name = "Sork"
 local callbackCache = {}
 local gamesDictionary = (function()
 	local rawDictionary = game:HttpGet(repositoryPrefix .. "gamesDictionary.lua")
@@ -29,6 +31,7 @@ for _, c in next, game:GetService("CoreGui"):GetChildren() do
 		c:Destroy()
 	end
 end
+print(getgenv().sork)
 getgenv().sork = {}
 getgenv().sork.global = {}
 
@@ -193,6 +196,10 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 			end)
 		end
 	elseif type == "boolean" then
+	    for i, v in next, getgenv().sork.global do
+	        print(i, v)
+	    end
+	    getgenv().sork.global[callbacksChild.Name or "TEMP_WONT_WORK"] = false
 		local current = false
 		local newBooleanFrame = Instance.new("Frame")
 		newBooleanFrame.BackgroundTransparency = 0.5
@@ -249,10 +256,10 @@ for index, callbacksChild in next, currentGameDictionary.stuff do
 			current = not (current)
 			if (current) then
 				newTextBox.Text = "ON"
-				getgenv().sork.global[callbacksChild.Name] = true
+				getgenv().sork.global[callbacksChild.Name or "TEMP_WONT_WORK"] = current
 			else
 				newTextBox.Text = "OFF"
-				getgenv().sork.global[callbacksChild.Name] = false
+				getgenv().sork.global[callbacksChild.Name or "TEMP_WONT_WORK"] = current
 			end
 			callback(current)
 		end)
