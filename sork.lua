@@ -29,7 +29,6 @@ for _, c in next, game:GetService("CoreGui"):GetChildren() do
 		c:Destroy()
 	end
 end
-print(getgenv().sork)
 getgenv().sork = {}
 getgenv().sork.global = {}
 
