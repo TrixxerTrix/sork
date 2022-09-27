@@ -6,8 +6,9 @@ local plrs = game:GetService("Players")
 local run = game:GetService("RunService")
 
 -- constants
+local playertoorbit = "namehere"
 local localplayer = plrs.LocalPlayer
-local nucleus, elec = workspace:FindFirstChild("Players").TheMuteFlan.HumanoidRootPart, localplayer.Character.HumanoidRootPart
+local nucleus, elec = workspace:FindFirstChild("Players"):FindFirstChild(playertoorbit).HumanoidRootPart, localplayer.Character.HumanoidRootPart
 local revpermin, rad = .25, 5
 
 local angle1 = Vector3.new(0.9, 0.7, 0.5)
