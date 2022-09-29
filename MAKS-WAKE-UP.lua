@@ -1,61 +1,105 @@
--- fumoorbit.lua
--- important!! awts gege
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
 
--- services
+-- == VERY Useful Stuff == --
+
+local function new(class, parent, properties)
+	assert(class, "class isn't present")
+	---   ---   ---
+	local new = Instance.new(class)
+	new.Parent = parent
+	---   ---   ---
+	for key, value in next, properties do
+		new[key] = value
+	end
+	---   ---   ---
+	return new
+end
+
+local start = os.clock()
+
+-- == IMPORTANT == --
+
+-- putting this here because idk where to put it
+local quotes = {"swag like ohio", "fumofumo", "hhhhhh", "doors players when flicker", "down like ohio", "hw t hcak: instal jjsplot", "print(\"Hello, world!\")"}
+
+-- Services --
+local rs = game:GetService("ReplicatedStorage")
+local tween = game:GetService("TweenService")
+local lighting = game:GetService("Lighting")
 local plrs = game:GetService("Players")
-local run = game:GetService("RunService")
+local debris = game:GetService("Debris")
+local core = game:GetService("CoreGui")
 
--- constants
-local playertoorbit = "namehere"
-local localplayer = plrs.LocalPlayer
-local nucleus, elec = workspace:FindFirstChild("Players"):FindFirstChild(playertoorbit).HumanoidRootPart, localplayer.Character.HumanoidRootPart
-local revpermin, rad = .25, 5
+-- Start making the loading gui, okay? --
+local started = new("BindableEvent", nil, {})
+coroutine.resume(coroutine.create(function()
+	local gui = new("ScreenGui", core, {IgnoreGuiInset = true})
+	local blur = new("BlurEffect", workspace.CurrentCamera, {Size = 0, Enabled = true})
+	local overlay = new("Frame", gui, {BackgroundColor3 = Color3.new(), BackgroundTransparency = 1, Size = UDim2.new(1,0,1,0), BorderSizePixel = 0})
+	local icon = new("ImageLabel", overlay, {AnchorPoint = Vector2.new(.5,.5), BackgroundTransparency = 1, Image = "http://www.roblox.com/asset/?id=2565668394", ImageTransparency = 1, Size = UDim2.new(0.156, 0, 0.278, 0),ScaleType = Enum.ScaleType.Fit, Position = UDim2.new(0.5,0,0.5,0)})
+	local title = new("TextLabel", overlay, {AnchorPoint = Vector2.new(.5,.5), BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, Text = "trix_lib.exe", TextScaled = true, TextColor3 = Color3.new(1,1,1), Size = UDim2.new(0.163, 0, 0.056, 0), Position = UDim2.new(0.5, 0, 0.5, 0), TextTransparency = 1})
+	local subtitle = new("TextLabel", overlay, {AnchorPoint = Vector2.new(.5,.5), BackgroundTransparency = 1, Font = Enum.Font.Gotham, Text = quotes[Random.new():NextInteger(1, #quotes)], TextScaled = true, TextColor3 = Color3.new(1,1,1), Size = UDim2.new(0.181, 0, 0.026, 0), Position = UDim2.new(0.5, 0, 0.554, 0), TextTransparency = 1})
+	local icontween = tween:Create(icon, TweenInfo.new(2, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut), {Rotation = 360})
+	local startedbool = false
 
-local angle1 = Vector3.new(0.9, 0.7, 0.5)
-local angle2 = Vector3.new(0, 0, 1)
--- change these in some ways that are really cool!!!!
+	tween:Create(overlay, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = .35}):Play()
+	tween:Create(blur, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = 24}):Play()
+	started.Event:Once(function()
+		startedbool = true
+	end)
 
-local pi = math.pi
-local cfnew = CFrame.new
-local v3new = Vector3.new
-local cos, sin = math.cos, math.sin
-local beat = run.Heartbeat
-local tk = tick
-local rng = Random.new
-
--- signals
-
--- variables
-local u, v
-
--- functions
--- you can also do stuff with these functions which is very cool, just change angle1 and angle2 in the loop to u and v
-function getrng(): number
-	return rng():NextNumber()*2-1
-end
-
-function rngv(): Vector3
-	local x
-	
+	task.wait(1)
+	tween:Create(icon, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 0}):Play()
 	repeat
-		x = Vector3.new(getrng(), getrng(), getrng())
-	until x.Magnitude <= 1
-	
-	return x
-end
+		icontween:Play()
+		icontween.Completed:Wait()
+		icon.Rotation = 0
+	until startedbool
 
-function rngpair()
-	local a, b = rngv(), rngv()
-	return a:Cross(b).Unit, b.Unit
-end
+	local out = tween:Create(icon, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {ImageTransparency = 1})
+	out:Play()
+	out.Completed:Wait() 
 
--- setup
-u, v = rngpair()
+	local titletween = tween:Create(title, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0})
+	titletween:Play()
+	titletween.Completed:Wait()
 
--- code
-while beat:Wait() do
-	local t = tk() * (pi * 2) * revpermin
-	--local orbit = v3new(cos(t), 0, sin(t))
-	local orbit = angle1 * cos(t) + angle2 * sin(t)
-	elec.CFrame = cfnew(nucleus.Position + orbit * rad)
-end
+	task.wait(2)
+
+	local subtitletween = tween:Create(subtitle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 0.5, Position = UDim2.new(0.5, 0, 0.528, 0)})
+	local titletween_2 = tween:Create(title, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.487, 0)})
+
+	subtitletween:Play()
+	titletween_2:Play()
+
+	subtitletween.Completed:Wait()
+	task.wait(3)
+
+	tween:Create(title, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
+	tween:Create(subtitle, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {TextTransparency = 1}):Play()
+	task.wait(1)
+	tween:Create(overlay, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+	tween:Create(blur, TweenInfo.new(.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = 0}):Play()
+	debris:AddItem(blur, .5)
+	debris:AddItem(gui, .5)
+end))
+
+-- Instances --
+
+-- Constants --
+
+-- Variables --
+
+-- Functions --
+
+-- == CORE == --
+
+-- Start --
+task.wait(1)
+started:Fire()
+
+-- Connections --
+
+-- Loops --
